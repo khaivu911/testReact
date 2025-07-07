@@ -7,7 +7,7 @@ import React from 'react';
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <div className='app-container'>
         Khai dep trai
         <MyComponent></MyComponent>
       </div>
