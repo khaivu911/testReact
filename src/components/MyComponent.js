@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AddUserInfor from './AddUserInfo';
+import AddUserInfo from './AddUserInfo';
 import DisplayInfor from './DisplayInfor';
 // class MyComponent extends React.Component {
 //     state = {
@@ -59,7 +59,7 @@ const MyComponent = (props) => {
     // DRY: Don't repeat yourself 
 
     const handleAddNewUser = (userObj) => {
-        setListUsers(userObj, ...listUsers);
+        setListUsers([userObj, ...listUsers]);
         // this.setState({
         //     listUsers: [userObj, ...this.state.listUsers]
         // })
@@ -77,7 +77,7 @@ const MyComponent = (props) => {
         <>
             <br />
             <div className='a'>
-                <AddUserInfor
+                <AddUserInfo
                     handleAddNewUser={handleAddNewUser}
                 />
                 <br /> 
