@@ -1,11 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+import { getAllUsers } from '../../../services/apiServices';    
 import ModalCreateUser from "./ModalCreateUser";
 import { FcPlus } from "react-icons/fc";
 import TableUser from "./TableUser";
+import ModalUpdateUser from './ModalUpdateUser';
 
 const ManageUser = (props) => {
 
-    const [showModalCreateUSer, setshowModalCreateUSer] = useState(false);
+    const [showModalCreateUser, setshowModalCreateUser] = useState(false);
+    const [showModalUpdateUser ,setshowModalUpdateUser] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState({});
+    const [listUsers, setListUsers] = useState([])
+
+    useEffect(()=>{
+        fetchListUsers();
+    },[]);
+
+    const fetchListUsers = async() => {
+        let res = await getAllUsers()
+        console.log(res);
+        if(res.EC === 0){
+            setListUsers(res.DT)
+        }
+    }
+    const handleClickBtnUpdate=(user) => {
+        setshowModalUpdateUser(true);
+        setDataUpdate(user);
+    }
 
     return (
         <div className="manage-user-container">
@@ -15,16 +36,24 @@ const ManageUser = (props) => {
             <div className="users-content">
                 <div className="btn-add-new">
                     <button className="btn btn-primary"
-                        onClick={() => setshowModalCreateUSer(true)}>
+                        onClick={() => setshowModalCreateUser(true)}>
                         <FcPlus /> Add new users
                     </button>
                 </div>
                 <div className="table-users-container">
-                    <TableUser/>
+                    <TableUser 
+                    listUsers={listUsers}
+                    handleClickBtnUpdate={handleClickBtnUpdate}/>
                 </div>
                 <ModalCreateUser
-                    show={showModalCreateUSer}
-                    setShow={setshowModalCreateUSer}
+                    show={showModalCreateUser}
+                    setShow={setshowModalCreateUser}
+                    fetchListUsers={fetchListUsers}
+                />
+                <ModalUpdateUser
+                    show={showModalUpdateUser}
+                    setShow={setshowModalUpdateUser}
+                    dataUpdate={dataUpdate}
                 />
             </div>
         </div>
