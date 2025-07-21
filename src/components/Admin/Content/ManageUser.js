@@ -1,22 +1,29 @@
 import { useEffect, useState } from 'react';
-import { getAllUsers } from '../../../services/apiServices';
+import { getAllUsers, getUserWithPaginate } from '../../../services/apiServices';
 import { FcPlus } from "react-icons/fc";
 import TableUser from "./TableUser";
 import ModalCreateUser from "./ModalCreateUser";
 import ModalUpdateUser from './ModalUpdateUser';
 import ModalViewUser from './ModalViewUser';
+import ModalDeleteUser from './ModalDeleteUser';
+import TableUserPaginate from './TableUserPaginate';
 
 const ManageUser = (props) => {
+    const LIMIT_USER = 7;
+    const [pageCount, setPageCount] = useState(0);
     const [showModalViewUser, setshowModalViewUser] = useState(false);
     const [showModalCreateUser, setshowModalCreateUser] = useState(false);
     const [showModalUpdateUser, setshowModalUpdateUser] = useState(false);
     const [dataUpdate, setDataUpdate] = useState({});
     const [listUsers, setListUsers] = useState([])
     const [dataView, setDataView] = useState({});
-    
+    const [dataDelete, setDataDelete] = useState({});
+    const [showModalDeleteUser, setshowModalDeleteUser] = useState(false);
+
 
     useEffect(() => {
-        fetchListUsers();
+        // fetchListUsers();
+        FetchListUsersWithPaginate(1);
     }, []);
 
     const fetchListUsers = async () => {
@@ -24,6 +31,15 @@ const ManageUser = (props) => {
         console.log(res);
         if (res.EC === 0) {
             setListUsers(res.DT)
+        }
+    }
+
+    const FetchListUsersWithPaginate = async (page) => {
+        let res = await getUserWithPaginate(page,LIMIT_USER )
+        if (res.EC === 0) {
+            console.log(res.DT);
+            setListUsers(res.DT.users);
+            setPageCount(res.DT.totalPages);
         }
     }
 
@@ -44,6 +60,10 @@ const ManageUser = (props) => {
         setshowModalViewUser(true);
     };
 
+    const handleClickBtnDelete = (user) => {
+        setshowModalDeleteUser(true);
+        setDataDelete(user)
+    }
     return (
         <div className="manage-user-container">
             <div className="title">
@@ -57,10 +77,20 @@ const ManageUser = (props) => {
                     </button>
                 </div>
                 <div className="table-users-container">
-                    <TableUser
+                    {/* <TableUser
                         listUsers={listUsers}
                         handleClickBtnUpdate={handleClickBtnUpdate}
-                        handleClickBtnView={handleClickBtnView} />
+                        handleClickBtnView={handleClickBtnView}
+                        handleClickBtnDelete={handleClickBtnDelete}
+                    /> */}
+                    <TableUserPaginate
+                        listUsers={listUsers}
+                        handleClickBtnUpdate={handleClickBtnUpdate}
+                        handleClickBtnView={handleClickBtnView}
+                        handleClickBtnDelete={handleClickBtnDelete}
+                        FetchListUsersWithPaginate={FetchListUsersWithPaginate}
+                        pageCount={pageCount}
+                    />
                 </div>
                 <ModalCreateUser
                     show={showModalCreateUser}
@@ -79,6 +109,12 @@ const ManageUser = (props) => {
                     setShow={setshowModalViewUser}
                     dataView={dataView}
                     resetViewData={resetViewData}
+                />
+                <ModalDeleteUser
+                    show={showModalDeleteUser}
+                    setShow={setshowModalDeleteUser}
+                    dataDelete={dataDelete}
+                    fetchListUsers={fetchListUsers}
                 />
             </div>
         </div>
