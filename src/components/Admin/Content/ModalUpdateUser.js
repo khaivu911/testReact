@@ -4,8 +4,9 @@ import Modal from 'react-bootstrap/Modal';
 import './ManageUser.scss';
 import { FcPlus } from "react-icons/fc";
 import { toast } from 'react-toastify';
-import { postCreateNewUser } from '../../../services/apiServices';
+import { putUpdateUser } from '../../../services/apiServices';
 import _ from 'lodash';
+
 
 const ModalUpdateUser = (props) => {
     const { show, setShow, dataUpdate } = props;
@@ -17,6 +18,7 @@ const ModalUpdateUser = (props) => {
         setRole("USER");
         setImage("");
         setPreviewImage("");
+        props.resetUpdateData();
     };
     const handleShow = () => setShow(true);
 
@@ -65,16 +67,12 @@ const ModalUpdateUser = (props) => {
             toast.error('invalid email')
             return;
         }
-        if (!password) {
-            toast.error('invalid password')
-            return;
-        }
 
-        let data = await postCreateNewUser(email, password, username, role, image);
+        let data = await putUpdateUser(dataUpdate.id ,username, role, image);
         if (data && data.EC === 0) {
             toast.success(data.EM);
             handleClose();
-            await props.fetchListUsers();
+            await props.FetchListUsersWithPaginate(props.currentPage);
         }
         if (data && data.EC !== 0) {
             toast.error(data.EM);
