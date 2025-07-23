@@ -93,6 +93,7 @@ const ManageUser = (props) => {
                         handleClickBtnDelete={handleClickBtnDelete}
                         FetchListUsersWithPaginate={FetchListUsersWithPaginate}
                         pageCount={pageCount}
+                        currentPage={currentPage}
                     />
                 </div>
                 <ModalCreateUser
@@ -101,6 +102,7 @@ const ManageUser = (props) => {
                     fetchListUsers={fetchListUsers}
                     FetchListUsersWithPaginate={FetchListUsersWithPaginate}
                     currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
                 />
                 <ModalUpdateUser
                     show={showModalUpdateUser}

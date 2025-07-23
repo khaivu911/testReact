@@ -41,7 +41,7 @@ const TableUserPaginate = (props) => {
                     }
                     {listUsers && listUsers.length == 0 &&
                         <tr>
-                            <td colSpan={'4'}>Not found data</td>
+                            <td colSpan={'5'}>Not found data</td>
                         </tr>}
                 </tbody>
             </table>
@@ -65,6 +65,7 @@ const TableUserPaginate = (props) => {
                     containerClassName="pagination"
                     activeClassName="active"
                     renderOnZeroPageCount={null}
+                    forcePage={props.currentPage - 1}
                 />
             </div>
 
