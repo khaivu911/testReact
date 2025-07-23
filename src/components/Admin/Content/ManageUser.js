@@ -22,7 +22,6 @@ const ManageUser = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
 
 
-
     useEffect(() => {
         // fetchListUsers();
         FetchListUsersWithPaginate(1);

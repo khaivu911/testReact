@@ -59,16 +59,16 @@ const ModalCreateUser = (props) => {
 
         let data = await postCreateNewUser(email, password, username, role, image);
         console.log(">>>check res: ", data)
-        if (data && data.EC === 0) {
-            toast.success(data.EM);
-            handleClose();
-            // await props.FetchListUsersWithPaginate(props.currentPage);
-            props.setCurrentPage(1);
-            await props.FetchListUsersWithPaginate(1);
-        }
-        if (data && data.EC !== 0) {
-            toast.error(data.EM);
-        }
+            if (data && data.EC === 0) {
+                toast.success(data.EM);
+                handleClose();
+                // await props.FetchListUsersWithPaginate(props.currentPage);
+                props.setCurrentPage(1);
+                await props.FetchListUsersWithPaginate(1);
+            }
+            if (data && data.EC !== 0) {
+                toast.error(data.EM);
+            }
     }
 
     return (
