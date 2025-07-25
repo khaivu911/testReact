@@ -3,19 +3,36 @@ import './Register.scss';
 import { useNavigate } from 'react-router-dom';
 import { postRegister } from '../../services/apiServices';
 import { toast } from 'react-toastify';
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 
 const Register = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
+    const [isShowPassword, setIsShowPassword] = useState(false);
     const navigate = useNavigate("");
-    const handleLogin = async () => {
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+    const handleRegister = async () => {
         //validate
-
+        const isValidEmail = validateEmail(email);
+        if (!isValidEmail) {
+            toast.error('Invalid email')
+            return;
+        }
+        if (!password) {
+            toast.error('Invalid password')
+            return;
+        }
 
         //submit API
-        let data = await postRegister(email,username, password)
+        let data = await postRegister(email, username, password)
         console.log(data);
         if (data && data.EC === 0) {
             toast.success(data.EM);
@@ -26,10 +43,10 @@ const Register = (props) => {
         }
     }
     return (
-        <div className="login-container">
+        <div className="register-container">
             <div className='header'>
                 <span>Already have an account ?</span>
-                <button onClick={()=>{navigate('/login')}}>Log in</button>
+                <button onClick={() => { navigate('/login') }}>Log in</button>
             </div>
             <div className='title col-4 mx-auto'>
                 Vu Khai
@@ -43,18 +60,34 @@ const Register = (props) => {
                     <input type={"email"} className="form-control"
                         value={email} onChange={(event) => setEmail(event.target.value)}></input>
                 </div>
+                
+                <div className='form-group pass-group'>
+                    <label>Password (*)</label>
+                    <input
+                        type={isShowPassword ? "text" : "password"}
+                        className="form-control"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                    />
+                    {isShowPassword ?
+                        <span className="icons-eye"
+                            onClick={() => setIsShowPassword(false)}>
+                            <VscEye />
+                        </span>
+                        :
+                        <span className="icons-eye"
+                            onClick={() => setIsShowPassword(true)}>
+                            <VscEyeClosed />
+                        </span>
+                    }
+                </div>
                 <div className='form-group'>
                     <label>Username</label>
                     <input type={"username"} className="form-control"
                         value={username} onChange={(event) => setUsername(event.target.value)}></input>
                 </div>
-                <div className='form-group'>
-                    <label>Password</label>
-                    <input type={"password"} className="form-control"
-                        value={password} onChange={(event) => setPassword(event.target.value)}></input>
-                </div>
                 <div>
-                    <button className='btn-submit' onClick={() => handleLogin()}>Register an account</button>
+                    <button className='btn-submit' onClick={() => handleRegister()}>Register an account</button>
                 </div>
                 <div className='text-center'>
                     <span className='back' onClick={() => { navigate('/') }}> &#60;&#60; Go to homepage</span>
