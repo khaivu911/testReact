@@ -3,12 +3,14 @@ import './Login.scss';
 import { useNavigate } from 'react-router-dom';
 import { postLogin } from '../../services/apiServices';
 import { toast } from 'react-toastify';
-
+import { useDispatch } from 'react-redux';
+import { doLogin } from '../../redux/action/userAction';
 
 const Login = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate("");
+    const dispatch = useDispatch();
     const validateEmail = (email) => {
         return String(email)
             .toLowerCase()
@@ -19,11 +21,11 @@ const Login = (props) => {
     const handleLogin = async () => {
         //validate
         const isValidEmail = validateEmail(email);
-        if (!isValidEmail){
+        if (!isValidEmail) {
             toast.error('Invalid email')
             return;
         }
-        if (!password){
+        if (!password) {
             toast.error('Invalid password')
             return;
         }
@@ -32,6 +34,7 @@ const Login = (props) => {
         //submit API
         let data = await postLogin(email, password)
         if (data && data.EC === 0) {
+            dispatch(doLogin(data))
             toast.success(data.EM);
             navigate('/');
         }
@@ -43,7 +46,7 @@ const Login = (props) => {
         <div className="login-container">
             <div className='header'>
                 <span>Don't have an account yet ? </span>
-                <button onClick={()=>{navigate('/register')}}>Sign up</button>
+                <button onClick={() => { navigate('/register') }}>Sign up</button>
             </div>
             <div className='title col-4 mx-auto'>
                 Vu Khai
