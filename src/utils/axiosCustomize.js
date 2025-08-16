@@ -1,16 +1,23 @@
 import axios from 'axios';
+import NProgress from 'nprogress';
+
+NProgress.configure({
+    showSpinner: false,
+    trickleSpeed: 100,
+});
 
 const instance = axios.create({
     baseURL: 'http://localhost:8081/',
-
 });
 
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {
+    NProgress.start();
     // Do something before request is sent
     return config;
 }, function (error) {
     // Do something with request error
+    NProgress.done();
     return Promise.reject(error);
 });
 
@@ -25,7 +32,7 @@ instance.interceptors.response.use(function (response) {
     // Do something with response error
     // console.log(">>> run error: ", error.response)
     return error && error.response && error.response.data
-        ? error.response.data :Promise.reject(error);
+        ? error.response.data : Promise.reject(error);
 });
 
 export default instance;

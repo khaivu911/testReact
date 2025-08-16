@@ -34,7 +34,7 @@ const getUserWithPaginate = (page, limit) => {
 }
 
 const postLogin = (userEmail, userPassword) => {
-        return axios.post(`api/v1/login`, {email: userEmail, password: userPassword})
+        return axios.post(`api/v1/login`, {email: userEmail, password: userPassword, delay: 2000})
 }
 const postRegister = (userEmail,userName, userPassword) => {
         return axios.post(`api/v1/register`, {email: userEmail,username: userName, password: userPassword})
